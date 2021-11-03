@@ -171,17 +171,15 @@ def init_net(preferential_targeting, verbose=False, targeting_criterion = 'hubs'
 
 
 # return (quality, fitness, id) meme tuple depending on bot flag
-# using https://en.wikipedia.org/wiki/Inverse_transform_sampling
-# default phi = 1 is bot deception; >= 1: meme fitness higher than quality 
+# default phi = .5; phi is the % of deceptiveness
 # N.B. get_meme.id is an attribute that works as a static var to get unique IDs
 #
-def get_meme(bot_flag, phi=1):
+def get_meme(bot_flag, phi=.5):
+  u = .1
   if bot_flag:
-    exponent = 1 + (1 / phi)
+    fitness = random.betavariate(u+(1-u)*phi,1)
   else:
-    exponent = 1 + phi
-  u = random.random()
-  fitness = 1 - (1 - u)**(1 / exponent)
+    fitness = random.betavariate(u,1)
   if bot_flag:
     quality = 0
   else:
